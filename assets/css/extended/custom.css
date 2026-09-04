@@ -1,0 +1,21 @@
+/* Widen the content column so multi-column data tables are fully visible.
+   PaperMod defaults --main-width to 720px, which crams the Indicators /
+   Observations / Forecasts tables. */
+:root {
+  --main-width: 1100px;
+}
+
+/* Very wide tables scroll horizontally instead of being clipped. */
+.post-content table {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Keep short cells from wrapping awkwardly; let long text (Description) wrap. */
+.post-content table th,
+.post-content table td {
+  white-space: normal;
+  vertical-align: top;
+}

@@ -13,8 +13,6 @@ title: "AI Bubble Risk Dashboard"
 | Burst Probability (18–24mo) | 60 |
 | Adoption Collapse Probability | 12.5 |
 
-<svg viewBox="0 0 680 200" role="img" aria-label="Risk score trend" style="max-width:100%;height:auto;font-family:system-ui,sans-serif"><text x="36" y="20" fill="currentColor" font-size="13" font-weight="600">Risk Score trend</text><text x="36" y="164.0" fill="currentColor" font-size="11" opacity="0.6" dx="-4" text-anchor="end">64</text><text x="36" y="164.0" fill="currentColor" font-size="11" opacity="0.6" dx="-4" text-anchor="end">64</text><circle cx="36.0" cy="164.0" r="3.5" fill="#e5484d"/><title>2026-09-04: 64</title></svg>
-
 ## Recent runs
 
 | Run Date | Risk Score | Score Change | Burst Probability | Risk Level | Direction |

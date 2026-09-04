@@ -401,7 +401,8 @@ def export_dashboard(client: Client, page_id: str, out_dir: Path,
         parts.append("")
         _ = score
 
-    if series:
+    # A trend needs at least two points; one run renders as an empty box.
+    if len(series) >= 2:
         parts.append(sparkline_svg(series) + "\n")
 
     if runs:
