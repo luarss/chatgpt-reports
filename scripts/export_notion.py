@@ -423,7 +423,8 @@ def main() -> int:
     if not token:
         print("ERROR: set NOTION_API_KEY.", file=sys.stderr)
         return 1
-    page_id = os.environ.get("NOTION_PAGE_ID", DEFAULT_PAGE_ID)
+    # Empty env var (e.g. an unset GitHub secret injected as "") falls back too.
+    page_id = os.environ.get("NOTION_PAGE_ID") or DEFAULT_PAGE_ID
     client = Client(auth=token)
 
     info = discover(client, page_id)
