@@ -9,6 +9,7 @@ on:
     branches: [main]
     paths-ignore:
       - "content/**"  # avoid loops from the export commit
+      - "data/**"
 
 concurrency:
   group: pages
@@ -48,7 +49,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add content
+          git add content data
           if git diff --cached --quiet; then
             echo "No content changes."
           else

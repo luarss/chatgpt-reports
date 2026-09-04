@@ -1,0 +1,141 @@
+{{- $rows := .Site.Data.indicators -}}
+{{- /* Distinct categories → stable color assignment */ -}}
+{{- $palette := slice "#3b82f6" "#10b981" "#f59e0b" "#8b5cf6" "#ec4899" "#14b8a6" "#f97316" "#6366f1" "#84cc16" "#06b6d4" -}}
+{{- $cats := slice -}}
+{{- range $rows }}{{ $cats = $cats | append .category }}{{ end -}}
+{{- $cats = $cats | uniq | sort -}}
+{{- $catColor := dict -}}
+{{- range $i, $c := $cats }}{{ $catColor = merge $catColor (dict $c (index $palette (mod $i (len $palette)))) }}{{ end -}}
+{{- /* Max weight for the influence bars */ -}}
+{{- $maxW := 0.0 -}}
+{{- range $rows }}{{ if gt .weight $maxW }}{{ $maxW = .weight }}{{ end }}{{ end -}}
+
+<style>
+.ind-wrap{--r-high:#ef4444;--r-low:#f59e0b;--r-ctx:#64748b;--on:#10b981;--off:#94a3b8;font-size:.92rem}
+.ind-controls{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;margin:.75rem 0 1rem}
+.ind-controls input[type=search],.ind-controls select{padding:.4rem .55rem;border:1px solid color-mix(in srgb,currentColor 25%,transparent);border-radius:8px;background:transparent;color:inherit;font:inherit}
+.ind-controls label{display:inline-flex;align-items:center;gap:.35rem;opacity:.85}
+.ind-count{margin-left:auto;opacity:.6;font-size:.85em}
+.ind-table{border-collapse:collapse;width:100%;display:table}
+.ind-table th,.ind-table td{padding:.5rem .6rem;border-bottom:1px solid color-mix(in srgb,currentColor 12%,transparent);text-align:left;vertical-align:top}
+.ind-table thead th{position:sticky;top:0;background:var(--theme,inherit);white-space:nowrap;cursor:pointer;user-select:none;font-weight:600}
+.ind-table th[data-sort]::after{content:"↕";opacity:.35;margin-left:.3em;font-size:.85em}
+.ind-table th[data-dir=asc]::after{content:"↑";opacity:.9}
+.ind-table th[data-dir=desc]::after{content:"↓";opacity:.9}
+.ind-table code{font-size:.85em;padding:.1em .35em;border-radius:5px;background:color-mix(in srgb,currentColor 10%,transparent)}
+.pill{display:inline-block;padding:.12em .55em;border-radius:999px;font-size:.82em;font-weight:600;background:color-mix(in srgb,var(--c) 18%,transparent);color:var(--c)}
+.dir{display:inline-block;padding:.12em .55em;border-radius:6px;font-size:.82em;font-weight:600;white-space:nowrap;background:color-mix(in srgb,var(--c) 16%,transparent);color:var(--c)}
+.wcell{min-width:120px}
+.wbar-track{display:block;height:6px;border-radius:4px;background:color-mix(in srgb,currentColor 10%,transparent);margin-top:.25rem;overflow:hidden}
+.wbar{display:block;height:100%;border-radius:4px;background:var(--c)}
+.wnum{font-variant-numeric:tabular-nums;font-weight:600}
+.on{color:var(--on)}.off{color:var(--off)}
+.desc{max-width:34ch;opacity:.85}
+.muted{opacity:.65;white-space:nowrap}
+.ind-table tr.hide{display:none}
+</style>
+
+<div class="ind-wrap">
+  <div class="ind-controls">
+    <input type="search" id="ind-q" placeholder="Search name, code, description…" aria-label="Search indicators">
+    <select id="ind-cat" aria-label="Filter by category">
+      <option value="">All categories</option>
+      {{- range $cats }}<option value="{{ . }}">{{ . }}</option>{{ end -}}
+    </select>
+    <select id="ind-dir" aria-label="Filter by risk direction">
+      <option value="">All directions</option>
+      <option value="Higher">Higher = Riskier</option>
+      <option value="Lower">Lower = Riskier</option>
+      <option value="Contextual">Contextual</option>
+    </select>
+    <label><input type="checkbox" id="ind-active"> Active only</label>
+    <span class="ind-count" id="ind-count"></span>
+  </div>
+
+  <table class="ind-table" id="ind-table">
+    <thead>
+      <tr>
+        <th data-sort data-type="text">Indicator</th>
+        <th data-sort data-type="text">Code</th>
+        <th data-sort data-type="text">Category</th>
+        <th data-sort data-type="num">Weight</th>
+        <th>Unit</th>
+        <th data-sort data-type="text">Direction</th>
+        <th data-sort data-type="text">Active</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{- range $rows -}}
+      {{- $dc := "ctx" -}}
+      {{- if in .direction "Higher" }}{{ $dc = "high" }}{{ else if in .direction "Lower" }}{{ $dc = "low" }}{{ end -}}
+      {{- $ratio := 0.0 -}}{{ if gt $maxW 0.0 }}{{ $ratio = div .weight $maxW }}{{ end -}}
+      {{- $wc := cond (ge $ratio 0.75) "#ef4444" (cond (ge $ratio 0.5) "#f59e0b" (cond (ge $ratio 0.25) "#eab308" "#10b981")) -}}
+      <tr data-category="{{ .category }}" data-direction="{{ .direction }}" data-active="{{ .active }}"
+          data-search="{{ lower .name }} {{ lower .code }} {{ lower .description }}">
+        <td><strong>{{ .name }}</strong></td>
+        <td><code>{{ .code }}</code></td>
+        <td><span class="pill" style="--c:{{ index $catColor .category }}">{{ .category }}</span></td>
+        <td class="wcell"><span class="wnum">{{ .weight }}</span>
+          <span class="wbar-track"><span class="wbar" style="width:{{ printf "%.0f" (mul $ratio 100) }}%;--c:{{ $wc }}"></span></span></td>
+        <td class="muted">{{ .unit }}</td>
+        <td><span class="dir" style="--c:var(--r-{{ $dc }})">{{ .direction }}</span></td>
+        <td>{{ if .active }}<span class="on" title="Active">● Yes</span>{{ else }}<span class="off" title="Inactive">○ No</span>{{ end }}</td>
+        <td class="desc">{{ .description }}</td>
+      </tr>
+      {{- end -}}
+    </tbody>
+  </table>
+</div>
+
+<script>
+(function(){
+  var table=document.getElementById('ind-table');
+  if(!table)return;
+  var tbody=table.tBodies[0];
+  var rows=[].slice.call(tbody.rows);
+  var q=document.getElementById('ind-q'),
+      cat=document.getElementById('ind-cat'),
+      dir=document.getElementById('ind-dir'),
+      active=document.getElementById('ind-active'),
+      count=document.getElementById('ind-count');
+
+  function applyFilters(){
+    var term=(q.value||'').trim().toLowerCase(),
+        c=cat.value, d=dir.value, a=active.checked, shown=0;
+    rows.forEach(function(r){
+      var ok=true;
+      if(term && r.dataset.search.indexOf(term)===-1)ok=false;
+      if(c && r.dataset.category!==c)ok=false;
+      if(d && r.dataset.direction.indexOf(d)===-1)ok=false;
+      if(a && r.dataset.active!=='true')ok=false;
+      r.classList.toggle('hide',!ok);
+      if(ok)shown++;
+    });
+    count.textContent=shown+' of '+rows.length+' indicators';
+  }
+
+  var ths=[].slice.call(table.tHead.rows[0].cells);
+  ths.forEach(function(th,idx){
+    if(!th.hasAttribute('data-sort'))return;
+    th.addEventListener('click',function(){
+      var num=th.dataset.type==='num',
+          asc=th.getAttribute('data-dir')!=='asc';
+      ths.forEach(function(t){t.removeAttribute('data-dir');});
+      th.setAttribute('data-dir',asc?'asc':'desc');
+      rows.sort(function(a,b){
+        var av=a.cells[idx].textContent.trim(),bv=b.cells[idx].textContent.trim();
+        if(num){av=parseFloat(av)||0;bv=parseFloat(bv)||0;return asc?av-bv:bv-av;}
+        return asc?av.localeCompare(bv):bv.localeCompare(av);
+      });
+      rows.forEach(function(r){tbody.appendChild(r);});
+    });
+  });
+
+  [q,cat,dir,active].forEach(function(el){
+    el.addEventListener('input',applyFilters);
+    el.addEventListener('change',applyFilters);
+  });
+  applyFilters();
+})();
+</script>

@@ -19,6 +19,7 @@ Environment:
 
 from __future__ import annotations
 
+import json
 import os
 import re
 import shutil
@@ -29,10 +30,10 @@ from notion_client import Client
 
 DEFAULT_PAGE_ID = "3d1b7fcffbda81f0a1c2f2a3324912cd"
 CONTENT_DIR = Path("content")
+DATA_DIR = Path("data")
 
 # Column order for each table section; missing columns are silently skipped.
-INDICATOR_COLS = ["Indicator", "Code", "Category", "Weight", "Unit", "Active",
-                  "Bubble Direction", "Description"]
+# (Indicators has its own interactive renderer, so it is not listed here.)
 OBSERVATION_COLS = ["Observation Date", "Indicator Code", "Entity", "Period",
                     "Value", "Value Text", "Unit", "Signal", "QoQ Change",
                     "YoY Change", "Source", "Source Type", "Confidence",
@@ -377,6 +378,41 @@ def export_methodology(client: Client, page_id: str, out_dir: Path) -> None:
     )
 
 
+def export_indicators(client: Client, db_id: str, content_dir: Path, data_dir: Path) -> None:
+    """Emit indicators as data/indicators.json + a page using the {{< indicators >}}
+    shortcode, which renders an interactive, color-coded, sortable/filterable table."""
+    rows = query_all(client, db_id)
+    items = []
+    for r in rows:
+        p = r["properties"]
+        items.append({
+            "name": prop_value(p, "Indicator") or "",
+            "code": prop_value(p, "Code") or "",
+            "category": prop_value(p, "Category") or "Uncategorized",
+            "weight": prop_value(p, "Weight") or 0,
+            "unit": prop_value(p, "Unit") or "",
+            "active": bool(prop_value(p, "Active")),
+            "direction": prop_value(p, "Bubble Direction") or "",
+            "description": prop_value(p, "Description") or "",
+        })
+    # Default order: highest-weight (most influential) first.
+    items.sort(key=lambda x: (-(x["weight"] or 0), x["category"]))
+
+    data_dir.mkdir(parents=True, exist_ok=True)
+    (data_dir / "indicators.json").write_text(
+        json.dumps(items, indent=2, ensure_ascii=False), encoding="utf-8")
+
+    section = content_dir / "indicators"
+    section.mkdir(parents=True, exist_ok=True)
+    body = (
+        front_matter({"title": "Indicators"})
+        + "\nIndicator families and weights driving the Bubble Risk Score. "
+        + "Click a column header to sort; use the controls to filter.\n\n"
+        + "{{< indicators >}}\n"
+    )
+    (section / "_index.md").write_text(body, encoding="utf-8")
+
+
 def export_dashboard(client: Client, page_id: str, out_dir: Path,
                      runs: list[dict], series: list[tuple[str, float]]) -> None:
     intro = blocks_to_md(client, page_id)  # Purpose / Workflow / Interpretation prose
@@ -444,9 +480,7 @@ def main() -> int:
         runs, series = export_runs(client, dbs["runs"], CONTENT_DIR)
         print(f"  runs: {len(runs)} rows")
     if "indicators" in dbs:
-        export_table_section(client, dbs["indicators"], CONTENT_DIR, "indicators",
-                             "Indicators", INDICATOR_COLS, sort_key="Category",
-                             intro="Indicator families and weights driving the Bubble Risk Score.")
+        export_indicators(client, dbs["indicators"], CONTENT_DIR, DATA_DIR)
         print("  indicators: exported")
     if "observations" in dbs:
         export_table_section(client, dbs["observations"], CONTENT_DIR, "observations",

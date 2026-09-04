@@ -1,0 +1,92 @@
+[
+  {
+    "name": "Neocloud Credit Stress",
+    "code": "NEOCLOUD_CREDIT",
+    "category": "Credit",
+    "weight": 18,
+    "unit": "bps / leverage",
+    "active": true,
+    "direction": "Higher = Riskier",
+    "description": "Credit spreads, CDS, debt terms, refinancing conditions and maturity mismatch for GPU clouds and AI infrastructure borrowers."
+  },
+  {
+    "name": "Enterprise AI Scaling & ROI",
+    "code": "ENTERPRISE_ROI",
+    "category": "Enterprise ROI",
+    "weight": 14,
+    "unit": "% adoption / ROI",
+    "active": true,
+    "direction": "Lower = Riskier",
+    "description": "Share of enterprises scaling AI and evidence of measurable returns from deployments."
+  },
+  {
+    "name": "Nvidia Data Center Revenue Growth",
+    "code": "NVDA_DC_YOY",
+    "category": "Accelerators",
+    "weight": 12,
+    "unit": "% YoY",
+    "active": true,
+    "direction": "Lower = Riskier",
+    "description": "Year-over-year growth in Nvidia Data Center revenue; rapid deceleration can indicate weakening accelerator demand."
+  },
+  {
+    "name": "H100/B200 Rental Pricing",
+    "code": "GPU_RENTAL",
+    "category": "GPU Market",
+    "weight": 12,
+    "unit": "USD/GPU-hour",
+    "active": true,
+    "direction": "Lower = Riskier",
+    "description": "Observable cloud and specialty-provider accelerator rental pricing as a proxy for scarcity, utilization and commoditization."
+  },
+  {
+    "name": "Hyperscaler AI Capex",
+    "code": "HYPER_CAPEX",
+    "category": "Hyperscaler Capex",
+    "weight": 12,
+    "unit": "USD / growth %",
+    "active": true,
+    "direction": "Contextual",
+    "description": "Aggregate and company-level capital expenditure by major cloud hyperscalers, with emphasis on AI infrastructure guidance."
+  },
+  {
+    "name": "Frontier Model Revenue Growth",
+    "code": "MODEL_REVENUE",
+    "category": "Model Economics",
+    "weight": 10,
+    "unit": "USD / growth %",
+    "active": true,
+    "direction": "Lower = Riskier",
+    "description": "Revenue and annualized run-rate growth of leading frontier model providers relative to compute commitments."
+  },
+  {
+    "name": "Power & Project Constraints",
+    "code": "POWER_PROJECTS",
+    "category": "Power & Construction",
+    "weight": 8,
+    "unit": "GW / project count",
+    "active": true,
+    "direction": "Contextual",
+    "description": "Interconnection queues, project delays/cancellations and power availability affecting AI data-center buildout."
+  },
+  {
+    "name": "Accelerator Inventory & Lead Times",
+    "code": "CHIP_INVENTORY",
+    "category": "Semiconductor Supply",
+    "weight": 8,
+    "unit": "USD / weeks",
+    "active": true,
+    "direction": "Higher = Riskier",
+    "description": "Finished-goods inventory, work-in-process, lead times and channel conditions for AI accelerators."
+  },
+  {
+    "name": "Private AI Valuation & Funding",
+    "code": "PRIVATE_VALUATION",
+    "category": "Private Markets",
+    "weight": 6,
+    "unit": "USD / multiple",
+    "active": true,
+    "direction": "Higher = Riskier",
+    "description": "Private-company valuation multiples, funding pace and financing terms relative to revenue and economics."
+  }
+]
