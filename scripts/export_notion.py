@@ -11,6 +11,7 @@ Methodology' child page. This script discovers those from the page id and emits:
   content/observations/_index.md  table of observations
   content/forecasts/_index.md     table of forecasts
   content/methodology.md          rendered from the child page
+  data/history.json               durable weekly time-series (trend source of truth)
 
 Environment:
   NOTION_API_KEY   Notion internal-integration secret (required)
@@ -295,7 +296,7 @@ def sparkline_svg(series: list[tuple[str, float]]) -> str:
     )
 
 
-def export_runs(client: Client, db_id: str, out_dir: Path) -> tuple[list[dict], list[tuple[str, float]]]:
+def export_runs(client: Client, db_id: str, out_dir: Path) -> list[dict]:
     rows = query_all(client, db_id)
     rows.sort(key=lambda r: prop_value(r["properties"], "Run Date") or "", reverse=True)
     section = out_dir / "runs"
@@ -345,14 +346,68 @@ def export_runs(client: Client, db_id: str, out_dir: Path) -> tuple[list[dict], 
             body.append("\n" + page_body)
         (section / f"{slug}.md").write_text(fm + "\n" + "\n".join(body) + "\n", encoding="utf-8")
 
-    # Ascending series for the trend chart.
+    return rows
+
+
+def run_record(props: dict) -> dict:
+    """Extract the durable, JSON-friendly fields of one weekly run."""
+    return {
+        "date": prop_value(props, "Run Date"),
+        "riskScore": prop_value(props, "Risk Score"),
+        "priorRiskScore": prop_value(props, "Prior Risk Score"),
+        "scoreChange": prop_value(props, "Score Change"),
+        "riskLevel": prop_value(props, "Risk Level"),
+        "direction": prop_value(props, "Direction"),
+        "burstProbability": prop_value(props, "Burst Probability"),
+        "adoptionCollapseProbability": prop_value(props, "Adoption Collapse Probability"),
+        "methodVersion": prop_value(props, "Method Version"),
+    }
+
+
+def update_history(runs: list[dict], data_dir: Path) -> list[dict]:
+    """Merge the current Notion runs into data/history.json and return it, sorted
+    ascending by date.
+
+    history.json is the durable source of truth for the trend: Notion supplies the
+    values, but rows are keyed by date and upserted here — a run edited or deleted
+    in Notion updates or leaves its entry, it never erases past history. This file
+    is intentionally NOT wiped by the content rebuild in main().
+    """
+    path = data_dir / "history.json"
+    history: dict[str, dict] = {}
+    if path.exists():
+        try:
+            for rec in json.loads(path.read_text(encoding="utf-8")):
+                if rec.get("date"):
+                    history[rec["date"]] = rec
+        except (json.JSONDecodeError, OSError):
+            history = {}
+
+    for r in runs:
+        rec = run_record(r["properties"])
+        date = rec.get("date")
+        if not date:
+            continue
+        # Keep prior values for any field Notion now leaves blank, so a durable
+        # record is never clobbered by a transient empty reading.
+        merged = {**history.get(date, {}), **{k: v for k, v in rec.items() if v is not None}}
+        merged["date"] = date
+        history[date] = merged
+
+    ordered = [history[d] for d in sorted(history)]
+    data_dir.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(ordered, indent=2, ensure_ascii=False), encoding="utf-8")
+    return ordered
+
+
+def history_series(history: list[dict]) -> list[tuple[str, float]]:
+    """Ascending (date, Risk Score) points for the trend chart."""
     series: list[tuple[str, float]] = []
-    for r in reversed(rows):
-        d = prop_value(r["properties"], "Run Date")
-        v = prop_value(r["properties"], "Risk Score")
+    for rec in history:
+        v = rec.get("riskScore")
         if isinstance(v, (int, float)) and not isinstance(v, bool):
-            series.append((str(d or ""), float(v)))
-    return rows, series
+            series.append((str(rec.get("date") or ""), float(v)))
+    return series
 
 
 def export_table_section(client: Client, db_id: str, out_dir: Path, slug: str,
@@ -477,8 +532,10 @@ def main() -> int:
 
     runs, series = ([], [])
     if "runs" in dbs:
-        runs, series = export_runs(client, dbs["runs"], CONTENT_DIR)
-        print(f"  runs: {len(runs)} rows")
+        runs = export_runs(client, dbs["runs"], CONTENT_DIR)
+        history = update_history(runs, DATA_DIR)
+        series = history_series(history)
+        print(f"  runs: {len(runs)} rows; history: {len(history)} entries")
     if "indicators" in dbs:
         export_indicators(client, dbs["indicators"], CONTENT_DIR, DATA_DIR)
         print("  indicators: exported")
