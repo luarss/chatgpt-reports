@@ -1,0 +1,63 @@
+# Hugo configuration. baseURL is overridden in CI for GitHub Pages.
+baseURL = "https://luarss.github.io/chatgpt-reports/"
+languageCode = "en-us"
+title = "AI Bubble Risk Dashboard"
+theme = "PaperMod"
+
+# Pagination for the reports list.
+[pagination]
+  pagerSize = 20
+
+enableRobotsTXT = true
+buildDrafts = false
+buildFuture = false
+
+[params]
+  # Landing shows the list of reports directly.
+  defaultTheme = "auto"
+  ShowReadingTime = true
+  ShowShareButtons = false
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  ShowToc = true
+
+# The home page is rendered from content/_index.md via layouts/index.html
+# (the exported dashboard), so PaperMod's homeInfoParams is not used.
+
+[[menu.main]]
+  identifier = "runs"
+  name = "Weekly Runs"
+  url = "/runs/"
+  weight = 10
+
+[[menu.main]]
+  identifier = "indicators"
+  name = "Indicators"
+  url = "/indicators/"
+  weight = 20
+
+[[menu.main]]
+  identifier = "observations"
+  name = "Observations"
+  url = "/observations/"
+  weight = 30
+
+[[menu.main]]
+  identifier = "forecasts"
+  name = "Forecasts"
+  url = "/forecasts/"
+  weight = 40
+
+[[menu.main]]
+  identifier = "methodology"
+  name = "Methodology"
+  url = "/methodology/"
+  weight = 50
+
+[markup.goldmark.renderer]
+  # Notion export may include raw HTML (e.g. embeds); allow it through.
+  unsafe = true
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]

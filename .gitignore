@@ -1,0 +1,13 @@
+# Hugo build output
+/public/
+/resources/_gen/
+.hugo_build.lock
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Local secrets — never commit
+.env
