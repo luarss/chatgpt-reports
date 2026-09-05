@@ -1,7 +1,7 @@
 # Hugo configuration. baseURL is overridden in CI for GitHub Pages.
 baseURL = "https://luarss.github.io/chatgpt-reports/"
 languageCode = "en-us"
-title = "AI Bubble Risk Dashboard"
+title = "Research Dashboards"
 theme = "PaperMod"
 
 # Pagination for the reports list.
@@ -22,38 +22,28 @@ buildFuture = false
   ShowCodeCopyButtons = true
   ShowToc = true
 
-# The home page is rendered from content/_index.md via layouts/index.html
-# (the exported dashboard), so PaperMod's homeInfoParams is not used.
+# The home page is a generic hub (content/_index.md) rendered via
+# layouts/index.html; each dashboard lives under its own /<slug>/ section, with
+# per-dashboard sub-section links rendered inside that dashboard's home page.
+# Keep the top menu to Home + one entry per dashboard.
 
 [[menu.main]]
-  identifier = "runs"
-  name = "Weekly Runs"
-  url = "/runs/"
+  identifier = "home"
+  name = "Home"
+  url = "/"
+  weight = 5
+
+[[menu.main]]
+  identifier = "ai-bubble"
+  name = "AI Bubble"
+  url = "/ai-bubble/"
   weight = 10
 
 [[menu.main]]
-  identifier = "indicators"
-  name = "Indicators"
-  url = "/indicators/"
+  identifier = "fundamental"
+  name = "Fundamental Screen"
+  url = "/fundamental/"
   weight = 20
-
-[[menu.main]]
-  identifier = "observations"
-  name = "Observations"
-  url = "/observations/"
-  weight = 30
-
-[[menu.main]]
-  identifier = "forecasts"
-  name = "Forecasts"
-  url = "/forecasts/"
-  weight = 40
-
-[[menu.main]]
-  identifier = "methodology"
-  name = "Methodology"
-  url = "/methodology/"
-  weight = 50
 
 [markup.goldmark.renderer]
   # Notion export may include raw HTML (e.g. embeds); allow it through.

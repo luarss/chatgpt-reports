@@ -38,11 +38,12 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Export Notion database
+      - name: Export Notion dashboards
         env:
           NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
-          # Optional: overrides the default dashboard page id baked into the script.
+          # Optional: override the per-dashboard page ids baked into the script.
           NOTION_PAGE_ID: ${{ secrets.NOTION_PAGE_ID }}
+          NOTION_FUNDAMENTAL_PAGE_ID: ${{ secrets.NOTION_FUNDAMENTAL_PAGE_ID }}
         run: python scripts/export_notion.py
 
       - name: Commit exported content

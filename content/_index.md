@@ -1,38 +1,23 @@
 ---
-title: "AI Bubble Risk Dashboard"
+title: "Research Dashboards"
 ---
 
 
-## Latest reading — 2026-09-04
+Structured research workspaces exported from Notion and published here. Pick a dashboard to explore its latest reading, history and detail tables.
 
-| Metric | Value |
-| --- | --- |
-| Risk Score | 64 |
-| Risk Level | Elevated |
-| Direction | Rising |
-| Burst Probability (18–24mo) | 60 |
-| Adoption Collapse Probability | 12.5 |
+## Dashboards
 
-## Recent runs
+### [AI Bubble Risk Dashboard](ai-bubble/)
 
-| Run Date | Risk Score | Score Change | Burst Probability | Risk Level | Direction |
-| --- | --- | --- | --- | --- | --- |
-| 2026-09-04 | 64 | 9 | 60 | Elevated | Rising |
+Weekly AI-bubble risk scoring: an evidence-based score, burst probability and indicator signals.
 
-## About this dashboard
+**Latest — 2026-09-04:** Risk Score 64 · Risk Level Elevated · Direction Rising
 
-## Purpose
 
-A durable research workspace for the Friday AI Bubble Risk Dashboard. The system separates raw evidence from derived signals and forecasts so the scoring methodology can evolve without overwriting history.
+### [Fundamental Opportunity Dashboard](fundamental/)
 
-## Workflow
+Weekday 100+ stock fundamental screen: per-ticker snapshots, trade ideas and dated observations.
 
-1. Collect current evidence from reliable public sources, prioritizing primary sources.
-2. Store immutable dated observations with units, source URLs and confidence.
-3. Compare observations with prior readings and calculate indicator signals.
-4. Save each Friday risk score and 18–24 month burst probability as a weekly run.
-5. Preserve explicit forecasts so they can later be calibrated against outcomes.
-## Interpretation
+**Latest — 2026-09-05 13:22:** Top Ticker DG · Top Score 91 · Actionable Longs 6
 
-The dashboard distinguishes an AI infrastructure/financial shakeout from a collapse in underlying AI adoption. GitHub can later hold code and methodology; Notion is the initial structured storage and research layer.
 
