@@ -18,6 +18,6 @@ Weekly AI-bubble risk scoring: an evidence-based score, burst probability and in
 
 Weekday 100+ stock fundamental screen: per-ticker snapshots, trade ideas and dated observations.
 
-**Latest — 2026-09-08 08:06:** Top Ticker DG · Top Score 91 · Actionable Longs 6
+**Latest — 2026-09-09 08:18:** Top Ticker DG · Top Score 92 · Actionable Longs 7
 
 
