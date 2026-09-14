@@ -11,7 +11,7 @@ Structured research workspaces exported from Notion and published here. Pick a d
 
 Weekly AI-bubble risk scoring: an evidence-based score, burst probability and indicator signals.
 
-**Latest — 2026-09-04:** Risk Score 64 · Risk Level Elevated · Direction Rising
+**Latest — 2026-09-14:** Risk Score 67 · Risk Level Elevated · Direction Rising
 
 
 ### [Fundamental Opportunity Dashboard](fundamental/)

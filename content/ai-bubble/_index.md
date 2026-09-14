@@ -6,20 +6,23 @@ title: "AI Bubble Risk Dashboard"
 [← All dashboards](../) · [Weekly Runs](runs/) · [Indicators](indicators/) · [Observations](observations/) · [Forecasts](forecasts/) · [Methodology](methodology/)
 
 
-## Latest reading — 2026-09-04
+## Latest reading — 2026-09-14
 
 | Metric | Value |
 | --- | --- |
-| Risk Score | 64 |
+| Risk Score | 67 |
 | Risk Level | Elevated |
 | Direction | Rising |
-| Burst Probability (18–24mo) | 60 |
-| Adoption Collapse Probability | 12.5 |
+| Burst Probability (18–24mo) | 63 |
+| Adoption Collapse Probability | 10 |
+
+<svg viewBox="0 0 680 200" role="img" aria-label="Risk Score trend" style="max-width:100%;height:auto;font-family:system-ui,sans-serif"><text x="36" y="20" fill="currentColor" font-size="13" font-weight="600">Risk Score trend</text><text x="36" y="36.0" fill="currentColor" font-size="11" opacity="0.6" dx="-4" text-anchor="end">67</text><text x="36" y="164.0" fill="currentColor" font-size="11" opacity="0.6" dx="-4" text-anchor="end">64</text><polyline fill="none" stroke="#e5484d" stroke-width="2.5" points="36.0,164.0 644.0,36.0"/><circle cx="36.0" cy="164.0" r="3.5" fill="#e5484d"/><title>2026-09-04: 64</title><circle cx="644.0" cy="36.0" r="3.5" fill="#e5484d"/><title>2026-09-14: 67</title></svg>
 
 ## Recent weekly runs
 
 | Run Date | Risk Score | Score Change | Burst Probability | Risk Level | Direction |
 | --- | --- | --- | --- | --- | --- |
+| 2026-09-14 | 67 | 3 | 63 | Elevated | Rising |
 | 2026-09-04 | 64 | 9 | 60 | Elevated | Rising |
 
 ## About this dashboard
