@@ -6,7 +6,7 @@ title: "Fundamental Opportunity Dashboard"
 [← All dashboards](../) · [Daily Runs](runs/) · [Stock Snapshots](snapshots/) · [Trade Ideas](trade-ideas/) · [Observations](observations/)
 
 
-## Latest reading — 2026-09-10 08:25
+## Latest reading — 2026-09-14 16:33
 
 | Metric | Value |
 | --- | --- |
@@ -16,12 +16,13 @@ title: "Fundamental Opportunity Dashboard"
 | Actionable Shorts | 0 |
 | Universe Size | 126 |
 
-<svg viewBox="0 0 680 200" role="img" aria-label="Top Score trend" style="max-width:100%;height:auto;font-family:system-ui,sans-serif"><text x="36" y="20" fill="currentColor" font-size="13" font-weight="600">Top Score trend</text><text x="36" y="36.0" fill="currentColor" font-size="11" opacity="0.6" dx="-4" text-anchor="end">92</text><text x="36" y="164.0" fill="currentColor" font-size="11" opacity="0.6" dx="-4" text-anchor="end">91</text><polyline fill="none" stroke="#e5484d" stroke-width="2.5" points="36.0,164.0 188.0,164.0 340.0,164.0 492.0,36.0 644.0,36.0"/><circle cx="36.0" cy="164.0" r="3.5" fill="#e5484d"/><title>2026-09-05T13:22: 91</title><circle cx="188.0" cy="164.0" r="3.5" fill="#e5484d"/><title>2026-09-07T08:06: 91</title><circle cx="340.0" cy="164.0" r="3.5" fill="#e5484d"/><title>2026-09-08T08:06: 91</title><circle cx="492.0" cy="36.0" r="3.5" fill="#e5484d"/><title>2026-09-09T08:18: 92</title><circle cx="644.0" cy="36.0" r="3.5" fill="#e5484d"/><title>2026-09-10T08:25: 92</title></svg>
+<svg viewBox="0 0 680 200" role="img" aria-label="Top Score trend" style="max-width:100%;height:auto;font-family:system-ui,sans-serif"><text x="36" y="20" fill="currentColor" font-size="13" font-weight="600">Top Score trend</text><text x="36" y="36.0" fill="currentColor" font-size="11" opacity="0.6" dx="-4" text-anchor="end">92</text><text x="36" y="164.0" fill="currentColor" font-size="11" opacity="0.6" dx="-4" text-anchor="end">91</text><polyline fill="none" stroke="#e5484d" stroke-width="2.5" points="36.0,164.0 157.6,164.0 279.2,164.0 400.8,36.0 522.4,36.0 644.0,36.0"/><circle cx="36.0" cy="164.0" r="3.5" fill="#e5484d"/><title>2026-09-05T13:22: 91</title><circle cx="157.6" cy="164.0" r="3.5" fill="#e5484d"/><title>2026-09-07T08:06: 91</title><circle cx="279.2" cy="164.0" r="3.5" fill="#e5484d"/><title>2026-09-08T08:06: 91</title><circle cx="400.8" cy="36.0" r="3.5" fill="#e5484d"/><title>2026-09-09T08:18: 92</title><circle cx="522.4" cy="36.0" r="3.5" fill="#e5484d"/><title>2026-09-10T08:25: 92</title><circle cx="644.0" cy="36.0" r="3.5" fill="#e5484d"/><title>2026-09-14T16:33: 92</title></svg>
 
 ## Recent daily runs
 
 | Run Date | Top Ticker | Top Score | Actionable Longs | Actionable Shorts | Universe Size |
 | --- | --- | --- | --- | --- | --- |
+| 2026-09-14 16:33 | DG | 92 | 7 | 0 | 126 |
 | 2026-09-10 08:25 | DG | 92 | 7 | 0 | 126 |
 | 2026-09-09 08:18 | DG | 92 | 7 | 0 | 125 |
 | 2026-09-08 08:06 | DG | 91 | 6 | 0 | 125 |
