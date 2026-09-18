@@ -169,10 +169,14 @@ DASHBOARDS = [
         "sections": [
             {"kind": "table", "slug": "snapshots", "keyword": "snapshot",
              "title": "Stock Snapshots", "columns": SNAPSHOT_COLS, "sort": "Score",
-             "intro": "Per-ticker fundamental snapshots from the latest screen."},
+             "dedupe_key": "Ticker", "dedupe_date": "Run Date",
+             "intro": "Current per-ticker fundamental state — the latest snapshot "
+                      "for each ticker across the delta-snapshot history."},
             {"kind": "table", "slug": "trade-ideas", "keyword": "trade idea",
              "title": "Trade Ideas", "columns": TRADE_IDEA_COLS, "sort": "Score",
-             "intro": "Actionable long/short ideas with thesis, catalyst and risks."},
+             "dedupe_key": "Ticker", "dedupe_date": "Run Date",
+             "intro": "Current actionable long/short ideas — the latest idea per "
+                      "ticker, with thesis, catalyst and risks."},
             {"kind": "table", "slug": "observations", "keyword": "observation",
              "title": "Observations", "columns": FUND_OBSERVATION_COLS,
              "sort": "Observed Date",
@@ -334,6 +338,29 @@ def query_all(client: Client, database_id: str) -> list[dict]:
             break
         cursor = resp["next_cursor"]
     return rows
+
+
+def collapse_latest(rows: list[dict], key_field: str, date_field: str) -> list[dict]:
+    """Delta-snapshot collapse: keep only the most recent row per key.
+
+    Under the v2 delta-snapshot model the screen writes a fresh row for a ticker
+    only when it changes (with periodic full checkpoints), so its database
+    accumulates one row per (ticker, run) over time. The *current* state of a
+    ticker is therefore its latest row by ``date_field``. Rows missing the key
+    can't be collapsed, so they are kept verbatim.
+    """
+    latest: dict = {}
+    extras: list[dict] = []
+    for r in rows:
+        key = prop_value(r["properties"], key_field)
+        if not key:
+            extras.append(r)
+            continue
+        d = str(prop_value(r["properties"], date_field) or "")
+        cur = latest.get(key)
+        if cur is None or str(prop_value(cur["properties"], date_field) or "") <= d:
+            latest[key] = r
+    return list(latest.values()) + extras
 
 
 def sort_rows(rows: list[dict], key: str, reverse: bool = True) -> None:
@@ -588,6 +615,9 @@ def history_series(history: list[dict]) -> list[tuple[str, float]]:
 def export_table_section(client: Client, db_id: str, section_dir: Path,
                          section: dict) -> None:
     rows = query_all(client, db_id)
+    if section.get("dedupe_key"):
+        rows = collapse_latest(rows, section["dedupe_key"],
+                               section.get("dedupe_date", "Run Date"))
     if section.get("sort"):
         sort_rows(rows, section["sort"])
     out = section_dir / section["slug"]

@@ -102,3 +102,9 @@ stays regardless.
   them in Notion needs a matching tweak to the dashboard's config.
 - Table columns per section are defined by the `*_COLS` lists in the script;
   unknown columns are skipped, so schema changes degrade gracefully.
+- The Fundamental screen uses a **delta-snapshot** model: its Snapshots and
+  Trade Ideas databases accumulate one row per (ticker, run) — a ticker is
+  re-written only when it changes, plus periodic full checkpoints. Those two
+  sections set `dedupe_key: "Ticker"` (+ `dedupe_date: "Run Date"`) so the
+  exporter collapses each to the **latest row per ticker** (current state).
+  Observations are an append-only log and are intentionally left un-collapsed.
